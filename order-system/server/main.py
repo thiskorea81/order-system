@@ -1,10 +1,11 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
+from typing import List
 
 app = FastAPI()
 
-# CORS 설정 추가
+# CORS 설정
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:5173"],  # Vue.js가 실행 중인 포트
@@ -19,7 +20,16 @@ class Order(BaseModel):
     item: str
     quantity: int
 
+# 임시로 주문을 저장할 리스트
+orders: List[Order] = []
+
 # 주문 접수 엔드포인트
 @app.post("/order")
 async def create_order(order: Order):
+    orders.append(order)  # 주문 데이터를 리스트에 저장
     return {"message": "Order received", "order": order}
+
+# 모든 주문 조회 엔드포인트
+@app.get("/orders")
+async def get_orders():
+    return {"orders": orders}
