@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from typing import List
+from typing import List, Optional
 
 app = FastAPI()
 
@@ -19,6 +19,7 @@ class Order(BaseModel):
     name: str
     item: str
     quantity: int
+    notes: Optional[str] = None  # 주문 메모는 선택 사항으로 설정
 
 # 임시로 주문을 저장할 리스트
 orders: List[Order] = []
